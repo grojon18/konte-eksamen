@@ -1,4 +1,6 @@
-# Oppgave 2 - guide til eksamen
+# Oppgave 2 og 3 - guide til eksamen
+
+## Oppgave 2
 
 ### 1 Opprette prosjekt
 [Opprett et nytt Google Cloud-prosjekt](https://cloud.google.com). (Husk å enable billing i prosjektet.)
@@ -78,6 +80,29 @@ Bind miljøvariabler mot Terraform-variablene:
 `export TF_VAR_project_id=$project-id`
 
 Kjør med `terraform run` og `terraform apply`. Bucket opprettes i Google Cloud.
+
+## Oppgave 3
+
+* For oppgave 3 må du i Google Cloud GUI (API & Services -> dashboard) enable API'er. De nødvendige er `Container Registry`, `Cloud Storage`, `Cloud Run` og `Compute Engine`.
+
+* Deretter legge til følgende roller til Service brukeren `Service Account User`, `Service Account Admin`, `Compute Admin`. Husk også storage admin fra oppgave 2.
+
+* I `.travis.yml` bytt `GCP_PROJECT_ID` til egen ID.
+
+* Bytt ut `bucket` til eget navn i `backend.tf`
+
+* Kjør kommandoen `travis env set TF_ENV_machine_type f1-micro --public` i terminalen.
+
+Til sist:
+
+```GIT
+  git add . , git commit -m "din commit melding", git push origin master
+```
+NB: Husk å ikke pushe opp google-key.json!
+
+* Disclaimer: Jeg kjører Travis på Windows-maskin. Travis sliter med å kjøre den encryptede filen pga Windows. Fikk dessverre ikke tid til
+å teste ut dette i eget Linux-miljø. Forsøkte å logge inn med `--pro` og kjøre kommandoen `travis encrypt-file google-key.json --pro` til ingen nytte.
+Mener at dette vil fungere på MAC/Linux.
 
 
 
