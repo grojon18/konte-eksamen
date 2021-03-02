@@ -1,0 +1,27 @@
+env:
+  global:
+  - GCP_PROJECT_ID=konte-eksamen
+  - tf_version=0.14.7
+  - CLOUDSDK_CORE_DISABLE_PROMPTS=1
+branches:
+  only:
+  - master
+before_install:
+- curl https://sdk.cloud.google.com | bash > /dev/null
+- source "$HOME/google-cloud-sdk/path.bash.inc"
+- gcloud auth activate-service-account --key-file=google-key.json
+- gcloud config set project "${GCP_PROJECT_ID}"
+- export GOOGLE_APPLICATION_CREDENTIALS=./google-key.json
+- wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
+- unzip terraform_"$tf_version"_linux_amd64.zip
+- sudo mv terraform /usr/local/bin/
+- rm terraform_"$tf_version"_linux_amd64.zip
+install: true
+script:
+- |-
+  export TF_VAR_project_id=$GCP_PROJECT_ID
+  export TF_VAR_machine_type=$TF_ENV_machine_type
+  terraform init
+  terraform plan
+  terraform apply --auto-approve
+  terraform output
